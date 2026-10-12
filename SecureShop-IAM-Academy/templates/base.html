@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b1020">
+    <title>{% block title %}SecureShop{% endblock %} | IAM Academy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{{ url_for('shop.home') }}">
+            <span class="brand-mark">S</span>
+            <span>Secure<span class="brand-accent">Shop</span>
+                <small>IAM ACADEMY</small>
+            </span>
+        </a>
+
+        <nav class="main-nav">
+            <a href="{{ url_for('shop.home') }}">Butiken</a>
+            <a href="{{ url_for('iam.iam_overview') }}">IAM Academy</a>
+            <a href="{{ url_for('shop.view_cart') }}">Varukorg</a>
+        </nav>
+
+        <div class="header-actions">
+            {% if session.get('username') %}
+                <span class="user-chip">{{ session.get('username') }}</span>
+                <form action="{{ url_for('auth.logout') }}" method="POST">
+<input type="hidden" name="csrf_token" value="{{ generate_csrf() }}">                    <button class="button button-ghost button-small" type="submit">
+                        Logga ut
+                    </button>
+                </form>
+            {% else %}
+                <a class="button button-ghost button-small"
+                   href="{{ url_for('auth.login') }}">Logga in</a>
+                <a class="button button-primary button-small"
+                   href="{{ url_for('auth.register') }}">Skapa konto</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="page-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <span>© 2026 SecureShop IAM Academy</span>
+        <span><span class="status-dot"></span> Lokal säkerhetsmiljö</span>
+    </footer>
+</body>
+</html>

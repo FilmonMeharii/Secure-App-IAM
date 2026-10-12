@@ -1,0 +1,61 @@
+html
+{% extends "base.html" %}
+
+{% block title %}Åtkomst nekad{% endblock %}
+
+{% block content %}
+<section class="denied-page">
+    <div class="denied-card">
+
+        <div class="denied-icon">!</div>
+
+        <span class="eyebrow">SECURESHOP · ACCESS CONTROL</span>
+
+        <h1>Access <span class="gradient-text">Denied.</span></h1>
+
+        <p class="denied-description">
+            Ditt konto saknar behörighet att öppna den här sidan.
+            Endast användare med administratörsrollen får fortsätta.
+        </p>
+
+        <div class="denied-details">
+            <div>
+                <span>INLOGGAD ANVÄNDARE</span>
+                <strong>{{ session.get('username', 'Okänd') }}</strong>
+            </div>
+
+            <div>
+                <span>DIN ROLL</span>
+                <strong>{{ session.get('role', 'Ingen roll')|upper }}</strong>
+            </div>
+
+            <div>
+                <span>KRÄVD ROLL</span>
+                <strong>ADMIN</strong>
+            </div>
+        </div>
+
+        <div class="denied-message">
+            <strong>Varför nekades åtkomsten?</strong>
+            <p>
+                Servern kontrollerade din roll och nekade begäran.
+                Att känna till en URL ger inte automatiskt behörighet.
+            </p>
+        </div>
+
+        <div class="denied-actions">
+            <a class="button button-primary"
+               href="{{ url_for('shop.home') }}">
+                Tillbaka till butiken
+            </a>
+
+            <a class="button button-ghost"
+               href="{{ url_for('iam.iam_overview') }}">
+                Öppna IAM Academy
+            </a>
+        </div>
+
+        <p class="denied-code">HTTP 403 · FORBIDDEN</p>
+    </div>
+</section>
+{% endblock %}

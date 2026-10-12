@@ -1,0 +1,113 @@
+
+{% extends "base.html" %}
+
+{% block title %}Audit Log{% endblock %}
+
+{% block content %}
+<section class="audit-page">
+    <div class="audit-hero">
+        <span class="eyebrow">SECURESHOP · SECURITY OPERATIONS</span>
+        <h1>Audit <span class="gradient-text">Logs.</span></h1>
+        <p class="muted">
+            Granska registrerade säkerhetshändelser i den lokala miljön.
+            Visar högst 200 händelser, nyaste först.
+        </p>
+    </div>
+
+    <form class="audit-filter" method="GET">
+        <label for="event">Filtrera händelser</label>
+        <select id="event" name="event">
+            <option value="" {% if not selected_event %}selected{% endif %}>
+                Alla händelser
+            </option>
+            <option value="login_success"
+                {% if selected_event == 'login_success' %}selected{% endif %}>
+                Lyckad inloggning
+            </option>
+            <option value="login_failed"
+                {% if selected_event == 'login_failed' %}selected{% endif %}>
+                Misslyckad inloggning
+            </option>
+            <option value="logout"
+                {% if selected_event == 'logout' %}selected{% endif %}>
+                Utloggning
+            </option>
+            <option value="admin_access_denied"
+                {% if selected_event == 'admin_access_denied' %}selected{% endif %}>
+                Nekad adminåtkomst
+            </option>
+            <option value="audit_logs_access_denied"
+                {% if selected_event == 'audit_logs_access_denied' %}selected{% endif %}>
+                Nekad loggåtkomst
+            </option>
+        </select>
+        <button class="button button-primary" type="submit">Filtrera</button>
+        <a class="button button-ghost"
+           href="{{ url_for('iam.audit_logs') }}">Rensa filter</a>
+    </form>
+
+    <div class="audit-summary">
+        <div>
+            <span class="eyebrow">VISAS PÅ SIDAN</span>
+            <strong>{{ logs|length }}</strong>
+        </div>
+        <div>
+            <span class="eyebrow">ÅTKOMST</span>
+            <strong class="audit-admin">ADMIN</strong>
+        </div>
+    </div>
+
+    <div class="audit-table-wrap">
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th>Tidpunkt (UTC)</th>
+                    <th>Händelse</th>
+                    <th>Användare</th>
+                    <th>Resultat</th>
+                    <th>Detaljer</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in logs %}
+                <tr>
+                    <td class="audit-time">{{ item["timestamp"] }}</td>
+                    <td>
+                        <span class="audit-event">{{ item["event"] }}</span>
+                    </td>
+                    <td>{{ item["username"] or "Okänd" }}</td>
+                    <td>
+                        <span class="audit-result
+                            {% if item['result'] == 'success' %}
+                                result-success
+                            {% else %}
+                                result-failure
+                            {% endif %}">
+                            {{ item["result"] }}
+                        </span>
+                    </td>
+                    <td class="audit-details">{{ item["details"] or "–" }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="audit-empty">
+                        Inga logghändelser hittades.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <p class="audit-footnote">
+        Loggarna är avsedda för lokal träning. Den här sidan visar data,
+        men ger inte i sig skydd mot att någon med direkt åtkomst till
+        databasen ändrar eller raderar loggarna.
+    </p>
+
+    <div class="admin-actions">
+        <a class="button button-ghost"
+           href="{{ url_for('iam.admin_page') }}">Till adminpanelen</a>
+    </div>
+</section>
+{% endblock %}

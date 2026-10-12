@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Smarta produkter{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-copy">
+        <span class="eyebrow">TEKNOLOGI · INTEGRITET · IDENTITET</span>
+        <h1>Säkerhet som<br>känns <span class="gradient-text">enkel.</span></h1>
+        <p class="hero-description">
+            Upptäck smarta tillbehör för en säkrare och mer privat digital vardag.
+        </p>
+        <div class="hero-actions">
+            <a class="button button-primary" href="#products">Utforska produkter ↘</a>
+            <a class="text-link" href="{{ url_for('iam.iam_overview') }}">Upptäck IAM Academy ↗</a>
+        </div>
+        <div class="hero-proof">
+            <span><span class="status-dot"></span> Lokal demomiljö</span>
+            <span>Ingen riktig betalning</span>
+        </div>
+    </div>
+
+    <div class="hero-visual">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="hero-shield">
+            <span class="shield-icon">⬡</span>
+            <span class="shield-check">✓</span>
+        </div>
+        <div class="floating-card floating-top">
+            <span class="mini-icon">✳</span>
+            <span><strong>Identity protected</strong><small>Identitet i fokus</small></span>
+        </div>
+        <div class="floating-card floating-bottom">
+            <span class="status-dot"></span>
+            <span><strong>Secure by design</strong><small>Utformat med säkerhet i åtanke</small></span>
+        </div>
+        <div class="visual-caption">DIGITAL TRUST, BUILT IN.</div>
+    </div>
+</section>
+
+<section class="trust-strip">
+    <div><span class="trust-symbol">◈</span><span><strong>Smart säkerhet</strong><small>Praktiska produkter</small></span></div>
+    <div><span class="trust-symbol">⬡</span><span><strong>Integritet först</strong><small>Digital medvetenhet</small></span></div>
+    <div><span class="trust-symbol">⌘</span><span><strong>IAM Academy</strong><small>Lär dig åtkomstkontroll</small></span></div>
+</section>
+
+<section id="products" class="products-section">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">UTVALT FÖR DIG</span>
+            <h2>Små saker. <span class="gradient-text">Större trygghet.</span></h2>
+            <p class="muted">Utforska sortimentet i vår simulerade webbshop.</p>
+        </div>
+        <a class="text-link" href="{{ url_for('shop.view_cart') }}">Visa varukorg ({{ cart_items }}) ↗</a>
+    </div>
+
+    <div class="product-grid">
+        {% for product in products %}
+        <article class="product-card">
+            <div class="product-art art-{{ product.id }}">
+                {% if product.tag %}
+                <span class="product-tag">{{ product.tag }}</span>
+                {% endif %}
+                <span class="product-symbol">{{ product.icon }}</span>
+                <span class="art-glow"></span>
+            </div>
+            <div class="product-info">
+                <span class="product-category">{{ product.category }}</span>
+                <h3>{{ product.name }}</h3>
+                <p class="muted">{{ product.description }}</p>
+                <div class="product-bottom">
+                    <span class="product-price">{{ product.price }} <small>kr</small></span>
+                    {% if session.get('username') %}
+                    <form action="{{ url_for('shop.add_to_cart', product_id=product.id) }}" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button class="add-button" type="submit" aria-label="Lägg {{ product.name }} i varukorgen">+</button>
+                    </form>
+                    {% else %}
+                    <a class="add-button" href="{{ url_for('auth.login') }}" aria-label="Logga in för att handla">+</a>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="academy-banner">
+    <div class="academy-mark">⌘</div>
+    <div>
+        <span class="eyebrow">LÄR DIG MEDAN DU BYGGER</span>
+        <h2>Mer än en webshop.</h2>
+        <p class="muted">Utforska identiteter, roller och åtkomstkontroll i en lokal träningsmiljö.</p>
+    </div>
+    <a class="button button-ghost" href="{{ url_for('iam.iam_overview') }}">Utforska Academy ↗</a>
+</section>
+{% endblock %}

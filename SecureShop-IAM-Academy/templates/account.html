@@ -1,0 +1,83 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Mitt konto{% endblock %}
+
+{% block content %}
+<section class="account-page">
+
+    <div class="account-hero">
+        <span class="eyebrow">SECURESHOP · IDENTITY CENTER</span>
+        <h1>My <span class="gradient-text">Account.</span></h1>
+        <p class="muted">
+            Visa din identitet, tilldelade behörigheter och kontostatus.
+        </p>
+    </div>
+
+    <div class="account-layout">
+
+        <article class="account-card">
+            <div class="account-avatar">
+                {{ session.get('username', '?')[0]|upper }}
+            </div>
+
+            <h2>{{ session.get('username', 'Okänd') }}</h2>
+            <p class="muted">Inloggad användare</p>
+
+            <span class="account-role">
+                {{ session.get('role', 'customer')|upper }}
+            </span>
+        </article>
+
+        <article class="account-details">
+            <span class="eyebrow">IDENTITY INFORMATION</span>
+            <h2>Kontouppgifter</h2>
+
+            <div class="account-detail-row">
+                <span>Användarnamn</span>
+                <strong>{{ session.get('username', 'Okänd') }}</strong>
+            </div>
+
+            <div class="account-detail-row">
+                <span>Tilldelad roll</span>
+                <strong>{{ session.get('role', 'customer')|upper }}</strong>
+            </div>
+
+            <div class="account-detail-row">
+                <span>Autentisering</span>
+                <strong class="account-active">Inloggad</strong>
+            </div>
+
+            <div class="account-detail-row">
+                <span>Behörighetsmodell</span>
+                <strong>RBAC</strong>
+            </div>
+        </article>
+
+    </div>
+
+    <div class="account-notice">
+        <strong>Om dina behörigheter</strong>
+        <p class="muted">
+            Din roll avgör vilka funktioner du får använda.
+            Administrativa resurser ska alltid kontrolleras på servern.
+            Den här sidan visar sessionsinformation och ändrar inga
+            behörigheter.
+        </p>
+    </div>
+
+    <div class="account-actions">
+        <a class="button button-primary"
+           href="{{ url_for('shop.home') }}">
+            Tillbaka till butiken
+        </a>
+
+        <a class="button button-ghost"
+           href="{{ url_for('iam.iam_overview') }}">
+            IAM Academy
+        </a>
+    </div>
+
+</section>
+{% endblock %}
+```

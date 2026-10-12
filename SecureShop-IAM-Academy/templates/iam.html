@@ -1,0 +1,198 @@
+
+{% extends "base.html" %}
+
+{% block title %}IAM Academy{% endblock %}
+
+{% block content %}
+<section class="iam-page">
+
+    <div class="iam-hero">
+        <div class="iam-hero-copy">
+            <span class="eyebrow">SECURESHOP · LEARNING CENTER</span>
+            <h1>Identity &amp; Access <span class="gradient-text">Management.</span></h1>
+            <p>
+                Förstå hur digitala identiteter, roller och åtkomstkontroll
+                samverkar för att skydda applikationer.
+            </p>
+
+            <div class="iam-hero-status">
+                <span class="status-dot"></span>
+                Lokal träningsmiljö aktiv
+            </div>
+        </div>
+
+        <div class="iam-hero-graphic">
+            <div class="iam-orbit iam-orbit-one"></div>
+            <div class="iam-orbit iam-orbit-two"></div>
+            <div class="iam-core">
+                <span>◈</span>
+                <small>IDENTITY</small>
+            </div>
+            <div class="iam-node iam-node-one">ID</div>
+            <div class="iam-node iam-node-two">RBAC</div>
+            <div class="iam-node iam-node-three">MFA</div>
+        </div>
+    </div>
+
+    <div class="iam-section-heading">
+        <div>
+            <span class="eyebrow">DIN IDENTITET</span>
+            <h2>Access overview</h2>
+        </div>
+        <span class="iam-live-badge">
+            <span class="status-dot"></span>
+            Session aktiv
+        </span>
+    </div>
+
+    <div class="iam-stats-grid">
+        <article class="iam-stat-card">
+            <div class="iam-stat-icon">◉</div>
+            <span class="iam-stat-label">ANVÄNDARE</span>
+            <strong class="iam-stat-value iam-stat-text">
+                {{ session.get('username', 'Okänd') }}
+            </strong>
+            <span class="iam-stat-foot">Inloggad identitet</span>
+        </article>
+
+        <article class="iam-stat-card">
+            <div class="iam-stat-icon">⬡</div>
+            <span class="iam-stat-label">TILLDELAD ROLL</span>
+            <strong class="iam-stat-value">
+                {{ session.get('role', 'unknown') | upper }}
+            </strong>
+            <span class="iam-stat-foot">Rollbaserad behörighet</span>
+        </article>
+
+        <article class="iam-stat-card">
+            <div class="iam-stat-icon">✓</div>
+            <span class="iam-stat-label">SESSION</span>
+            <strong class="iam-stat-value">ACTIVE</strong>
+            <span class="iam-stat-foot">Lokal inloggning</span>
+        </article>
+
+        <article class="iam-stat-card">
+            <div class="iam-stat-icon">⌘</div>
+            <span class="iam-stat-label">ÅTKOMSTMODELL</span>
+            <strong class="iam-stat-value">RBAC</strong>
+            <span class="iam-stat-foot">Role-Based Access Control</span>
+        </article>
+    </div>
+
+    <div class="iam-content-grid">
+        <section class="iam-panel">
+            <div class="iam-panel-heading">
+                <div>
+                    <span class="eyebrow">AUTHORIZATION</span>
+                    <h2>Åtkomstkontroll</h2>
+                </div>
+                <span class="iam-panel-symbol">⌘</span>
+            </div>
+
+            <p class="muted iam-panel-description">
+                Applikationen använder roller för att avgöra vilka sidor
+                en användare får komma åt.
+            </p>
+
+            <div class="iam-access-row">
+                <div class="iam-access-icon">◉</div>
+                <div class="iam-access-info">
+                    <strong>Butiken</strong>
+                    <span>Startsida och produktkatalog</span>
+                </div>
+                <span class="access-badge access-allowed">Publik</span>
+            </div>
+
+            <div class="iam-access-row">
+                <div class="iam-access-icon">▤</div>
+                <div class="iam-access-info">
+                    <strong>Mitt konto</strong>
+                    <span>Kräver inloggning</span>
+                </div>
+                {% if session.get('username') %}
+                <span class="access-badge access-allowed">Inloggad</span>
+                {% else %}
+                <span class="access-badge access-denied">Nekad</span>
+                {% endif %}
+            </div>
+
+            <div class="iam-access-row">
+                <div class="iam-access-icon">⬡</div>
+                <div class="iam-access-info">
+                    <strong>Adminpanel</strong>
+                    <span>Kräver rollen admin</span>
+                </div>
+                {% if session.get('role') == 'admin' %}
+                <span class="access-badge access-allowed">Tillåten</span>
+                {% else %}
+                <span class="access-badge access-denied">Begränsad</span>
+                {% endif %}
+            </div>
+
+            <a class="button button-ghost iam-full-button"
+               href="{{ url_for('iam.admin_page') }}">
+                Testa adminåtkomst ↗
+            </a>
+        </section>
+
+        <section class="iam-panel">
+            <div class="iam-panel-heading">
+                <div>
+                    <span class="eyebrow">SECURITY CONCEPTS</span>
+                    <h2>IAM fundamentals</h2>
+                </div>
+                <span class="iam-panel-symbol">✳</span>
+            </div>
+
+            <div class="iam-concept">
+                <div class="iam-concept-number">01</div>
+                <div>
+                    <h3>Authentication</h3>
+                    <p>Verifierar vem användaren är, exempelvis med användarnamn och lösenord.</p>
+                </div>
+            </div>
+
+            <div class="iam-concept">
+                <div class="iam-concept-number">02</div>
+                <div>
+                    <h3>Authorization</h3>
+                    <p>Avgör vilka resurser användaren har behörighet att komma åt.</p>
+                </div>
+            </div>
+
+            <div class="iam-concept">
+                <div class="iam-concept-number">03</div>
+                <div>
+                    <h3>Least privilege</h3>
+                    <p>Varje konto ska bara ha de behörigheter som behövs för uppgiften.</p>
+                </div>
+            </div>
+
+            <div class="iam-concept">
+                <div class="iam-concept-number">04</div>
+                <div>
+                    <h3>Role-Based Access Control</h3>
+                    <p>Behörigheter styrs av roller, till exempel customer och admin.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="iam-bottom-banner">
+        <div class="iam-bottom-icon">⌘</div>
+        <div>
+            <span class="eyebrow">PRACTICAL LAB</span>
+            <h2>Testa din åtkomst</h2>
+            <p class="muted">
+                Jämför hur kund- och administratörskonton behandlas av applikationen.
+            </p>
+        </div>
+        <a class="button button-primary" href="{{ url_for('iam.account_page') }}">
+            Visa mitt konto ↗
+        </a>
+    </section>
+
+</section>
+
+{% endblock %}
+

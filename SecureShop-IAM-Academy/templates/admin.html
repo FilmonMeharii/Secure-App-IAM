@@ -1,0 +1,119 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Adminpanel{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+
+    <div class="admin-hero">
+        <div>
+            <span class="eyebrow">SECURESHOP · CONTROL CENTER</span>
+            <h1>Admin <span class="gradient-text">Dashboard.</span></h1>
+            <p class="muted">
+                Översikt över administratörsåtkomst och säkerhetsfunktioner
+                i den lokala träningsmiljön.
+            </p>
+            <span class="admin-status">
+                <span class="status-dot"></span>
+                Administratörsbehörighet verifierad
+            </span>
+        </div>
+
+        <div class="admin-hero-icon">⬡</div>
+    </div>
+
+    <div class="admin-stats">
+        <article class="admin-card">
+            <span class="admin-card-label">INLOGGAD ANVÄNDARE</span>
+            <strong>{{ session.get('username', 'Okänd') }}</strong>
+            <span class="muted">Aktiv session</span>
+        </article>
+
+        <article class="admin-card">
+            <span class="admin-card-label">TILLDELAD ROLL</span>
+            <strong class="gradient-text">ADMIN</strong>
+            <span class="muted">Administratörsåtkomst</span>
+        </article>
+
+        <article class="admin-card">
+            <span class="admin-card-label">ÅTKOMSTMODELL</span>
+            <strong>RBAC</strong>
+            <span class="muted">Rollbaserad åtkomstkontroll</span>
+        </article>
+    </div>
+
+    <section class="admin-panel">
+        <div class="admin-panel-heading">
+            <div>
+                <span class="eyebrow">SECURITY CONTROLS</span>
+                <h2>Säkerhetsöversikt</h2>
+            </div>
+            <span class="admin-panel-symbol">⌘</span>
+        </div>
+
+        <div class="admin-security-row">
+            <div class="admin-security-icon">✓</div>
+            <div class="admin-security-info">
+                <strong>Rollkontroll</strong>
+                <span>Servern kontrollerar adminrollen vid åtkomst till denna sida.</span>
+            </div>
+            <span class="access-badge access-allowed">Aktiv</span>
+        </div>
+
+        <div class="admin-security-row">
+            <div class="admin-security-icon">✓</div>
+            <div class="admin-security-info">
+                <strong>Lösenordshantering</strong>
+                <span>Applikationen använder lösenordshashning.</span>
+            </div>
+            <span class="access-badge access-allowed">Konfigurerad</span>
+        </div>
+
+        <div class="admin-security-row">
+            <div class="admin-security-icon">✓</div>
+            <div class="admin-security-info">
+                <strong>CSRF-skydd</strong>
+                <span>Flask-WTF skyddar POST-förfrågningar med CSRF-token.</span>
+            </div>
+            <span class="access-badge access-allowed">Aktiverat</span>
+        </div>
+
+        <div class="admin-security-row">
+            <div class="admin-security-icon">◈</div>
+            <div class="admin-security-info">
+                <strong>Lokal databas</strong>
+                <span>Användardata lagras i SQLite i projektmiljön.</span>
+            </div>
+            <span class="access-badge access-allowed">Lokal</span>
+        </div>
+    </section>
+
+    <div class="admin-notice">
+        <span class="admin-notice-icon">i</span>
+        <div>
+            <strong>Träningsmiljö</strong>
+            <p class="muted">
+                Detta är en lokal demonstrationspanel. Statusarna beskriver
+                projektets avsedda funktioner och ersätter inte automatiska
+                säkerhetstester eller en fullständig revision.
+            </p>
+        </div>
+    </div>
+
+    <div class="admin-actions">
+        <a class="button button-primary" href="{{ url_for('iam.iam_overview') }}">
+            Till IAM Academy
+        </a>
+        <a class="button button-ghost" href="{{ url_for('shop.home') }}">
+            Tillbaka till butiken
+        </a>
+        <a class="button button-primary"
+        href="{{ url_for('iam.audit_logs') }}">
+        Visa Audit Logs
+        </a>
+    </div>
+
+</section>
+{% endblock %}
+```
