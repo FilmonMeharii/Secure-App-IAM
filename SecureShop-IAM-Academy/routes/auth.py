@@ -1,5 +1,5 @@
 import sqlite3
-
+from security import is_login_locked
 from audit import log_event
 
 from flask import (
@@ -78,6 +78,20 @@ def login():
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
 
+        if is_login_locked(username):
+            log_event(
+                event="login_blocked",
+                username=username or None,
+                result="failure",
+                details="För många misslyckade inloggningsförsök.",
+            )
+
+            return (
+                "För många misslyckade inloggningsförsök. "
+                "Försök igen om fem minuter.",
+                429,
+            )
+
         with sqlite3.connect(
             current_app.config["DATABASE_PATH"]
         ) as conn:
@@ -91,7 +105,9 @@ def login():
                 (username,),
             ).fetchone()
 
-        if user and check_password_hash(user["password_hash"], password):
+        if user and check_password_hash(
+            user["password_hash"], password
+        ):
             session.clear()
             session["username"] = user["username"]
             session["role"] = user["role"]
@@ -128,7 +144,6 @@ def login():
     </form>
     <p><a href="/register">Skapa konto</a></p>
     """.format(error=error, csrf=generate_csrf())
-
 
 @auth_bp.route("/logout", methods=["POST"])
 def logout():

@@ -23,7 +23,6 @@ def iam_overview():
 
     return render_template("iam.html")
 
-
 @iam_bp.route("/admin")
 def admin_page():
     if "username" not in session:
@@ -38,6 +37,9 @@ def admin_page():
         )
 
         return render_template("access_denied.html"), 403
+
+    return render_template("admin.html")
+
 
 
 @iam_bp.route("/account")
